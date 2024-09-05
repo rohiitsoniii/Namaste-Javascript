@@ -1,119 +1,95 @@
-lets start javascript fro interview prepration with akshay saini by his namaste js series ..
-
-Question 1:- how js code is run  
 
 
-To understand how JavaScript code runs, we need to explore several key concepts like the **Execution Context**, **Call Stack**, **Memory Heap**, and the **Event Loop**. Let's break it down:
+# JavaScript Code Execution: Behind the Scenes
 
-### 1. **Execution Context**
-   The **Execution Context** is the environment in which JavaScript code is evaluated and executed. There are two main types of execution contexts:
-   - **Global Execution Context (GEC):** This is created when the script starts to execute. It handles code that’s not inside any function.
-   - **Function Execution Context (FEC):** Every time a function is invoked, a new execution context is created for that function.
+Understanding how JavaScript code runs is crucial for mastering the language. Below is a breakdown of the key concepts involved in JavaScript execution:
 
-   Each execution context has two phases:
-   - **Creation Phase:** Before the code runs, JavaScript engine creates the context. During this phase:
-     - Variables and functions are allocated memory.
-     - Variables are initialized with `undefined` (known as **hoisting**).
-     - Functions are stored in memory with their definitions.
-   
-   - **Execution Phase:** Once the creation phase is complete, the code is executed line by line, and the actual values are assigned to variables.
+## 1. Execution Context
+An **Execution Context** is the environment where JavaScript code runs. There are two main types:
+- **Global Execution Context (GEC)**: Created when the script first executes. Handles non-function code.
+- **Function Execution Context (FEC)**: Created whenever a function is invoked.
 
-   **Execution Context** contains three key components:
-   - **Variable Environment:** Where variables and function declarations are stored.
-   - **Lexical Environment:** The environment that includes the current execution context and its outer environment.
-   - **`this` Binding:** Refers to the value of `this` within the context (e.g., in the global context, `this` refers to the global object like `window` in browsers).
+Each context goes through two phases:
+- **Creation Phase**: Memory is allocated for variables (set to `undefined`) and functions (defined with their entire code).
+- **Execution Phase**: Code runs line by line, assigning actual values to variables.
 
-### 2. **Call Stack**
-   The **Call Stack** is a data structure that manages the execution contexts. It keeps track of which function is currently being executed and which function called it.
+The execution context has:
+- **Variable Environment**: Stores variables and function declarations.
+- **Lexical Environment**: Includes the current context and its outer scope.
+- **`this` Binding**: Represents the value of `this` within the context (e.g., in the global context, `this` refers to `window` in browsers).
 
-   - When the JavaScript engine encounters a script, it creates a Global Execution Context and pushes it to the call stack.
-   - Each time a function is invoked, a new Function Execution Context is created and pushed onto the stack.
-   - When a function completes its execution, it’s popped off the stack, and the engine continues with the previous execution context.
+## 2. Call Stack
+The **Call Stack** tracks function calls:
+- Global Execution Context is pushed to the stack first.
+- Function calls push their respective contexts to the stack.
+- Once a function completes, its context is popped off the stack.
 
-   **Example of Call Stack in action:**
-   ```js
-   function a() {
-     console.log("Inside a");
-     b();
-   }
-   
-   function b() {
-     console.log("Inside b");
-   }
-   
-   a();
-   ```
-   - The Global Execution Context is pushed onto the stack first.
-   - When `a()` is called, a new execution context for `a` is pushed.
-   - Inside `a()`, `b()` is called, and a new context for `b` is pushed.
-   - Once `b()` completes, its context is popped, and control goes back to `a()`.
+**Example:**
+```js
+function a() {
+  console.log("Inside a");
+  b();
+}
 
-### 3. **Memory Heap**
-   The **Memory Heap** is where memory allocation happens for objects and variables. JavaScript uses it to store objects, arrays, and functions. It's an unstructured region of memory where data is stored and accessed.
+function b() {
+  console.log("Inside b");
+}
 
-### 4. **Event Loop and Callback Queue**
-   JavaScript is single-threaded, meaning it can execute one task at a time. To handle asynchronous operations (like fetching data or timers), it uses an **Event Loop** and a **Callback Queue**.
+a();
+```
 
-   - **Call Stack**: Executes synchronous code, one frame at a time.
-   - **Callback Queue**: Holds the callback functions for asynchronous tasks (like `setTimeout`, `fetch`, etc.) once they are ready to be executed.
+## 3. Memory Heap
+The **Memory Heap** is where objects, arrays, and functions are stored. It's an unstructured area of memory used for dynamic memory allocation.
 
-   The **Event Loop** constantly checks if the call stack is empty. If it is, it takes the first task from the callback queue and pushes it onto the stack for execution.
+## 4. Event Loop and Callback Queue
+JavaScript uses an **Event Loop** to handle asynchronous code despite being single-threaded. The **Call Stack** runs synchronous code, while the **Callback Queue** holds asynchronous tasks (e.g., `setTimeout`, `fetch`) to be executed when the stack is empty.
 
-   **Example of Asynchronous Code Execution:**
-   ```js
-   console.log('Start');
+**Example:**
+```js
+console.log('Start');
+setTimeout(() => console.log('Inside timeout'), 1000);
+console.log('End');
+```
 
-   setTimeout(() => {
-     console.log('Inside timeout');
-   }, 1000);
+## 5. Hoisting
+Variables and functions are **hoisted** during the creation phase, meaning their declarations are moved to the top of their scope. However, variables declared with `var` are initialized as `undefined`.
 
-   console.log('End');
-   ```
-   - The synchronous code (`Start`, `End`) is executed first.
-   - The `setTimeout` callback is placed in the callback queue and only executed after the stack is empty and 1000ms has passed.
+**Example:**
+```js
+console.log(a); // undefined
+var a = 5;
+```
 
-### 5. **Hoisting**
-   During the creation phase of the execution context, variable and function declarations are hoisted. This means that variables are set to `undefined`, and function declarations are stored before the actual execution begins.
+## 6. Lexical Environment and Scope Chain
+Each execution context has a **Lexical Environment** that defines the scope of variables. It includes references to its parent context, creating a **Scope Chain** that determines where variables can be accessed.
 
-   **Example:**
-   ```js
-   console.log(a); // undefined
-   var a = 5;
-   ```
-   The variable `a` is hoisted to the top, and it’s initialized with `undefined` before the code runs.
+- **Global Scope**: Accessible everywhere.
+- **Function Scope**: Accessible only inside functions.
+- **Block Scope**: Variables declared with `let` or `const` are block-scoped.
 
-### 6. **Lexical Environment and Scope Chain**
-   Every execution context has a **Lexical Environment**. This environment contains all the variables, function declarations, and references to its parent environment, creating the **Scope Chain**. This helps JavaScript determine where to find variables based on the scope in which they were declared.
+## 7. Closures
+A **Closure** occurs when a function "remembers" its lexical environment even when called outside its original context.
 
-   - **Global Scope:** Variables declared outside any function.
-   - **Function Scope:** Variables declared inside a function are accessible only within that function.
-   - **Block Scope:** Variables declared with `let` or `const` inside a block `{}` are block-scoped and can't be accessed outside the block.
+**Example:**
+```js
+function outer() {
+  var a = 10;
+  return function inner() {
+    console.log(a);
+  };
+}
 
-### 7. **Closures**
-   A **Closure** happens when a function remembers its lexical environment even when it is executed outside its original context.
+var closureFunc = outer();
+closureFunc(); // Outputs: 10
+```
 
-   **Example:**
-   ```js
-   function outer() {
-     var a = 10;
-     return function inner() {
-       console.log(a); // It remembers 'a' from outer
-     };
-   }
+## Summary
+- **Execution Context**: Manages variable initialization and code execution.
+- **Call Stack**: Tracks function calls.
+- **Memory Heap**: Stores dynamic data.
+- **Event Loop**: Manages asynchronous operations.
+- **Hoisting**: Moves variable and function declarations to the top.
+- **Lexical Environment**: Manages scope and access to variables.
+- **Closures**: Functions retain access to outer variables even after the outer function has finished.
 
-   var closureFunc = outer();
-   closureFunc(); // Outputs: 10
-   ```
-
-   In this case, even after `outer()` has finished execution, the inner function retains access to the `a` variable, forming a closure.
-
-### Summary
-- **Execution Context**: Created for global and function executions, handling variable initialization and code execution.
-- **Call Stack**: Keeps track of function calls and their order of execution.
-- **Memory Heap**: Stores objects and variables.
-- **Event Loop**: Manages asynchronous code execution, checking the call stack and callback queue.
-- **Hoisting**: Moves declarations to the top during the creation phase.
-- **Lexical Environment**: Determines variable accessibility via the scope chain.
-- **Closures**: Functions retain access to variables from their parent scope even after the parent function has finished executing.
-
-This entire mechanism enables JavaScript to efficiently run and manage both synchronous and asynchronous code.
+---
