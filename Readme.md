@@ -1,6 +1,6 @@
 
 
-# JavaScript Code Execution: Behind the Scenes
+# 1.JavaScript Code Execution: Behind the Scenes
 
 Understanding how JavaScript code runs is crucial for mastering the language. Below is a breakdown of the key concepts involved in JavaScript execution:
 
@@ -93,3 +93,71 @@ closureFunc(); // Outputs: 10
 - **Closures**: Functions retain access to outer variables even after the outer function has finished.
 
 ---
+
+
+
+
+---
+
+# 2. Hoisting in JavaScript
+
+**Hoisting** is a JavaScript mechanism where variable and function declarations are moved to the top of their respective scopes (global or function) during the creation phase of the execution context. This allows you to use variables and functions before they are declared in the code.
+
+However, it's important to note that **only declarations** are hoisted, not initializations (assignments).
+
+### Variable Hoisting
+
+In the case of variables, only the declaration is hoisted, and the initialization remains where it is in the code. Before the initialization, the variable is set to `undefined`.
+
+#### Example:
+```js
+console.log(a);  // Output: undefined
+var a = 5;
+console.log(a);  // Output: 5
+```
+**Explanation:**
+- The declaration `var a;` is hoisted to the top of the scope, but the initialization `a = 5` remains in place.
+- As a result, when `console.log(a)` is called before the initialization, `a` has the value `undefined`.
+
+#### `let` and `const` Hoisting
+
+Variables declared with `let` and `const` are also hoisted, but they are not initialized until the code reaches the line where they are defined. Accessing them before their declaration results in a **ReferenceError** because they are in a **"temporal dead zone"**.
+
+#### Example:
+```js
+console.log(b);  // ReferenceError: Cannot access 'b' before initialization
+let b = 10;
+```
+
+### Function Hoisting
+
+**Function declarations** are fully hoisted, meaning you can call a function even before you declare it in the code. Both the declaration and the function definition are hoisted.
+
+#### Example:
+```js
+sayHello();  // Output: Hello!
+function sayHello() {
+  console.log("Hello!");
+}
+```
+
+**Explanation:**
+- The entire function `sayHello` (both the declaration and the body) is hoisted to the top, allowing it to be invoked before it appears in the code.
+
+#### Function Expression Hoisting
+
+Unlike function declarations, **function expressions** are not fully hoisted. When a function is assigned to a variable, only the variable declaration is hoisted, not the function assignment. So, calling a function expression before it is defined will result in an error.
+
+#### Example:
+```js
+sayHi();  // TypeError: sayHi is not a function
+var sayHi = function() {
+  console.log("Hi!");
+};
+```
+
+**Explanation:**
+- The variable `sayHi` is hoisted but initialized as `undefined`, which means it's not a function at the point it's called.
+
+---
+
